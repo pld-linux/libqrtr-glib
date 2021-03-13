@@ -23,6 +23,7 @@ BuildRequires:	rpmbuild(macros) >= 1.98
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 Requires:	glib2 >= 1:2.48
+Conflicts:	libqmi < 1.28.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -39,6 +40,7 @@ Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libqrtr-glib
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.48
+Conflicts:	libqmi-devel < 1.28.0
 
 %description devel
 Header files for libqrtr-glib library.
