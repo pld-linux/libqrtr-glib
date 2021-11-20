@@ -7,7 +7,7 @@ Summary:	Library to use and monitor the QRTR bus
 Summary(pl.UTF-8):	Biblioteka do korzystania i monitorowania szyny QRTR
 Name:		libqrtr-glib
 Version:	1.0.0
-Release:	1
+Release:	2
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://www.freedesktop.org/software/libqmi/%{name}-%{version}.tar.xz
