@@ -6,23 +6,25 @@
 Summary:	Library to use and monitor the QRTR bus
 Summary(pl.UTF-8):	Biblioteka do korzystania i monitorowania szyny QRTR
 Name:		libqrtr-glib
-Version:	1.0.0
-Release:	2
+Version:	1.2.0
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
-Source0:	https://www.freedesktop.org/software/libqmi/%{name}-%{version}.tar.xz
-# Source0-md5:	c831b1478d430e2b587e84ae13ffea02
-URL:		https://www.freedesktop.org/software/libqmi/libqrtr-glib/latest/
-BuildRequires:	glib2-devel >= 1:2.48
+#Source0Download: https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib/-/tags
+Source0:	https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib/-/archive/%{version}/%{name}-%{version}.tar.bz2
+# Source0-md5:	9404df8249b4b07da5905b4c708ce310
+URL:		https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib
+BuildRequires:	glib2-devel >= 1:2.56
 BuildRequires:	gobject-introspection-devel >= 0.9.6
 %{?with_apidocs:BuildRequires:	gtk-doc >= 1.0}
 BuildRequires:	linux-libc-headers >= 7:4.7
+BuildRequires:	meson >= 0.53.0
+BuildRequires:	ninja >= 1.5
 BuildRequires:	pkgconfig
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpmbuild(macros) >= 1.98
-BuildRequires:	tar >= 1:1.22
-BuildRequires:	xz
-Requires:	glib2 >= 1:2.48
+BuildRequires:	rpmbuild(macros) >= 1.714
+BuildRequires:	sed >= 4.0
+Requires:	glib2 >= 1:2.56
 Conflicts:	libqmi < 1.28.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -39,7 +41,7 @@ Summary:	Header files for libqrtr-glib library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libqrtr-glib
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	glib2-devel >= 1:2.48
+Requires:	glib2-devel >= 1:2.56
 Conflicts:	libqmi-devel < 1.28.0
 
 %description devel
@@ -75,22 +77,20 @@ Dokumentacja API biblioteki libqrtr-glib.
 %prep
 %setup -q
 
+%if %{with static_libs}
+%{__sed} -i -e '/^libqrtr_glib =/ s/shared_library/library/' src/libqrtr-glib/meson.build
+%endif
+
 %build
-%configure \
-	--enable-gtk-doc%{!?with_apidocs:=no} \
-	--disable-silent-rules \
-	%{!?with_static_libs:--disable-static} \
-	--with-html-dir=%{_gtkdocdir}
-%{__make}
+%meson build \
+	%{!?with_apidocs:-Dgtk_doc=false}
+
+%ninja_build -C build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
-
-# obsoleted by pkg-config
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/libqrtr-glib.la
+%ninja_install -C build
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -100,7 +100,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog NEWS README
+%doc AUTHORS NEWS README.md
 %attr(755,root,root) %{_libdir}/libqrtr-glib.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libqrtr-glib.so.0
 %{_libdir}/girepository-1.0/Qrtr-1.0.typelib
