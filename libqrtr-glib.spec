@@ -6,13 +6,13 @@
 Summary:	Library to use and monitor the QRTR bus
 Summary(pl.UTF-8):	Biblioteka do korzystania i monitorowania szyny QRTR
 Name:		libqrtr-glib
-Version:	1.2.0
+Version:	1.2.2
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 #Source0Download: https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib/-/tags
 Source0:	https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib/-/archive/%{version}/%{name}-%{version}.tar.bz2
-# Source0-md5:	9404df8249b4b07da5905b4c708ce310
+# Source0-md5:	ff475b280ce8cce31e4d5e41fd6d0c43
 URL:		https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib
 BuildRequires:	glib2-devel >= 1:2.56
 BuildRequires:	gobject-introspection-devel >= 0.9.6
